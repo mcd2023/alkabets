@@ -1,12 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const slides = document.querySelectorAll("#slider img");
+
+  // sadece slider varsa çalışsın (site bozulmasın)
+  const slider = document.getElementById("slider");
+  const caption = document.getElementById("caption");
+
+  if (!slider) return;
+
+  const slides = slider.querySelectorAll("img");
+  if (slides.length === 0) return;
+
   let current = 0;
 
-  function showSlide(index) {
-    slides.forEach((img, i) => {
-      img.classList.remove("active");
-      if (i === index) img.classList.add("active");
-    });
+  function showSlide(i) {
+
+    slides.forEach(img => img.classList.remove("active"));
+    slides[i].classList.add("active");
+
+    // caption varsa çalıştır (diğer sayfalar bozulmasın)
+    if (caption) {
+      caption.classList.remove("show");
+
+      setTimeout(() => {
+        caption.innerText = slides[i].dataset.title || "";
+        caption.classList.add("show");
+      }, 300);
+    }
   }
 
   function nextSlide() {
@@ -16,4 +34,5 @@ document.addEventListener("DOMContentLoaded", () => {
 
   showSlide(current);
   setInterval(nextSlide, 3000);
+
 });
